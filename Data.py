@@ -1,6 +1,5 @@
 '''
-This class extract the data from the csv files
-to numpy arrays
+This class handle the raw data
 '''
 
 class Data():
