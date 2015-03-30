@@ -28,7 +28,7 @@ class Data():
             # Remove date
             date = row.pop(1).split('/')
             row.insert(1, int(date[2]))
-            row.insert(1, int(date[1]))
+            row.insert(1, int(date[0]))
             return row
 
         with open(csv, 'r+') as f:
@@ -43,13 +43,9 @@ class Data():
                     self.data.append(row)
                 else: 
                     flag = False 
-	                               
-    
-    def load(self, file):
-        print '\n Loading data from a pickle file into Numpy arrays'
 
     # Check min and max revenues in training data
-    def getLimits(self):
+    def getLimitRevenue(self):
         min = sys.maxint
         max = 0
 
@@ -59,18 +55,56 @@ class Data():
     			min = revenue
     		elif (revenue > max):
     			max = revenue
-
+        
     	print 'The min revenue is {0} and the max is {1}' .format(min, max)
 
+    # Show when the last restaurant was open
+    def getOpenDate(self, limit):
+        
+        def getIndex(index):
+        	return self.data[index][2], self.data[index][1]
+        
+        def getNewst():
+        	year = 0
+        	month = 0
 
+    		for i in xrange(len(self.data)):
+    			index_year, index_month = getIndex(i)
+	    		
+	    		if (index_year > year):
+	    				year, month = index_year, index_month
 
+    			elif (index_year == year) and (index_month >= month):
+    				year, month = index_year, index_month
 
+	    	return year, month
+
+    	def getOldest():
+    		year = sys.maxint
+    		month = sys.maxint
+
+    		for i in xrange(len(self.data)):
+    			index_year, index_month = getIndex(i)
+	    		
+	    		if (index_year < year):
+	    				year, month = index_year, index_month
+    			
+    			elif (index_year < year) and (index_month <= month):
+    				year, month = index_year, index_month
+
+	    	return year, month
+
+        if (limit == 'new'):
+        	year, month = getNewst()
+        	print 'The last restaurant was open on the month {0} of {1}' .format(month, year)
     	
-
-
-if __name__ == "__main__":
-    d = Data("/Users/Navarro/Documents/Kaggle_Competition/Restaurant_Revenue_Prediction/restaurant-revenue/Data/train.csv")
-    d.getLimits()
-
+    	elif (limit == 'old'):
+    		year, month = getOldest()
+    		print 'The oldest restaurant was open on the month {0} of {1}' .format(month, year)
+        else:
+        	print 'wrong arguments on getOldest()'
+        	exit(1)
+    		   
+    	
 
 
