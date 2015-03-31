@@ -2,6 +2,7 @@
 This class handle the raw data
 '''
 import sys 
+
 class Data():
     data = []
 
@@ -34,7 +35,7 @@ class Data():
         with open(csv, 'r+') as f:
             for line in f:
                 # Discard the first line
-                if (flag == False):
+                if flag == False:
                     row = line.split(',')
                     row = getRevenue(row)
                     row = toFloat(row)
@@ -51,9 +52,9 @@ class Data():
 
     	for i in xrange(len(self.data)):
     		revenue = int(self.data[i][len(self.data[i]) - 1])
-    		if (revenue < min):
+    		if revenue < min:
     			min = revenue
-    		elif (revenue > max):
+    		elif revenue > max:
     			max = revenue
         
     	print 'The min revenue is {0} and the max is {1}' .format(min, max)
@@ -71,10 +72,10 @@ class Data():
     		for i in xrange(len(self.data)):
     			index_year, index_month = getIndex(i)
 	    		
-	    		if (index_year > year):
+	    		if index_year > year:
 	    				year, month = index_year, index_month
 
-    			elif (index_year == year) and (index_month >= month):
+    			elif index_year == year and index_month >= month:
     				year, month = index_year, index_month
 
 	    	return year, month
@@ -86,24 +87,48 @@ class Data():
     		for i in xrange(len(self.data)):
     			index_year, index_month = getIndex(i)
 	    		
-	    		if (index_year < year):
+	    		if index_year < year:
 	    				year, month = index_year, index_month
     			
-    			elif (index_year < year) and (index_month <= month):
+    			elif index_year < year and index_month <= month:
     				year, month = index_year, index_month
 
 	    	return year, month
 
-        if (limit == 'new'):
+        if limit == 'new':
         	year, month = getNewst()
         	print 'The last restaurant was open on the month {0} of {1}' .format(month, year)
     	
-    	elif (limit == 'old'):
+    	elif limit == 'old':
     		year, month = getOldest()
     		print 'The oldest restaurant was open on the month {0} of {1}' .format(month, year)
         else:
         	print 'wrong arguments on getOldest()'
         	exit(1)
+    
+    '''
+    Returns a list of revenues for that city
+    '''
+    def getCityRevenue(self, city):
+        return [self.data[i][len(self.data[i]) - 1] for i in xrange(len(self.data)) if self.data[i][3] == city] 
+
+
+    '''
+    Returns a list with the P values for that city
+    :feature is an int corresponding to the P feature
+    '''
+    def getCityP(self, city, feature):
+        # P1 is index 6, therefore index = 5 + feature
+        p_index = 5 + int(feature)
+        return [self.data[i][p_index] for i in xrange(len(self.data)) if self.data[i][3] == city]
+
+    '''
+    Returns a list with the P values
+    '''
+    def getP(self, feature):
+        # P1 is index 6, therefore index = 5 + feature
+        p_index = 5 + int(feature)
+        return [self.data[i][p_index] for i in xrange(len(self.data))]        
     		   
     	
 
