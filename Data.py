@@ -1,7 +1,8 @@
 '''
 This class handle the raw data
 '''
-import sys 
+import sys
+import matplotlib.pyplot as plt
 
 class Data():
     data = []
@@ -88,7 +89,7 @@ class Data():
     			index_year, index_month = getIndex(i)
 	    		
 	    		if index_year < year:
-	    				year, month = index_year, index_month
+	    			year, month = index_year, index_month
     			
     			elif index_year < year and index_month <= month:
     				year, month = index_year, index_month
@@ -110,8 +111,13 @@ class Data():
     Returns a list of revenues for that city
     '''
     def getCityRevenue(self, city):
-        return [self.data[i][len(self.data[i]) - 1] for i in xrange(len(self.data)) if self.data[i][3] == city] 
-
+        revenues = [self.data[i][len(self.data[i]) - 1] for i in xrange(len(self.data)) if self.data[i][3] == city] 
+        index = [i for i in xrange(0,len(revenues))]
+        plt.plot(revenues,index, 'ro')
+        plt.ylabel('Revenues')
+        title = 'Revenue in' + city
+        plt.title(title)
+        plt.show()
 
     '''
     Returns a list with the P values for that city
@@ -120,8 +126,13 @@ class Data():
     def getCityP(self, city, feature):
         # P1 is index 6, therefore index = 5 + feature
         p_index = 5 + int(feature)
-        return [self.data[i][p_index] for i in xrange(len(self.data)) if self.data[i][3] == city]
-
+        P_value = [self.data[i][p_index] for i in xrange(len(self.data)) if self.data[i][3] == city]
+        index = [i for i in xrange(0,len(P_value))]
+        plt.plot(P_value, index, 'ro')
+        plt.ylabel('P values')
+        title = 'P' + str(feature) + ' in ' + city
+        plt.title(title)
+        plt.show()
     '''
     Returns a list with the P values
     '''
